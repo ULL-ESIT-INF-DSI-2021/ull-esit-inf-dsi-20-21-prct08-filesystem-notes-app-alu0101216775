@@ -1,0 +1,4 @@
+{
+    "entryPoints": ["./src/ej3/BasicStreamableCollection.ts", "./src/ej3/collectionType.ts", "./src/ej3/Documentary.ts", "./src/ej3/DocumentaryCollection.ts", "./src/ej3/Film.ts", "./src/ej3/FilmCollection.ts", "./src/ej3/MultimediaElement.ts", "./src/ej3/Streamable.ts", "./src/ej3/SearchableStreamable.ts", "./src/ej3/Series.ts", "./src/ej3/SeriesCollection.ts"],
+    "out": "./docs/typedoc-ej3"
+  }
