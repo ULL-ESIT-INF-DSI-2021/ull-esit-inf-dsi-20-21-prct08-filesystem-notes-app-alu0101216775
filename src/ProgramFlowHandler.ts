@@ -14,22 +14,26 @@ export class ProgramFlowHandler {
     }
 
     /**
-     * Añade una nota si no existe.
+     * Añade una nota únicamente si no existe.
      * 1. Comprueba que exista el directorio del usuario. Si no es así, lo crea.
      * 2. Almacena la nota como JSON en el fichero correspondiente
      * 3. Guarda la nota en la lista de notas en memoria.
      * @param note 
      */
     addNote(note: Note) {
-        try {
-            this.checkUserDirectory(note.user);
-            fs.writeFile(note.route, this.noteToJSON(note), () => {
-                console.log('tmp.json has just been created');
-              });
-              this.notes.addNote(note);
-        } catch {
-            console.error(chalk.red("Something went wrong. It was not possible to write the new note."));
-        }
+        if(!this.checkIfFileExist(note.route)) {
+            try {
+                this.checkUserDirectory(note.user);
+                fs.writeFile(note.route, this.noteToJSON(note), () => {
+                    console.log(chalk.green("Note Added Successfully!"));
+                  });
+                  this.notes.addNote(note);
+            } catch {
+                console.error(chalk.red("Something went wrong. It was not possible to write the new note."));
+            }
+        } else {
+            console.error(chalk.red("This note already exist. Try modifying it or choosing another title."));
+        }  
     }
 
     /**
@@ -45,7 +49,17 @@ export class ProgramFlowHandler {
      * @param note 
      */
     deleteNote(note: string) {
-        this.notes.deleteNote(note);
+        if(this.checkIfFileExist(note)) {
+            try {
+                fs.unlinkSync(note);
+                this.notes.deleteNote(note);
+                console.log(chalk.green("Note Removed Successfully!"));
+            } catch {
+                console.error(chalk.red("Something went wrong. It was not possible to remove the note."));
+            }
+        } else {
+            console.error(chalk.red("This note does not exist. Try another title or create that note."));
+        }  
     }
 
     /**
@@ -88,5 +102,14 @@ export class ProgramFlowHandler {
         if (!fs.existsSync(userDir)){
             fs.mkdirSync(userDir);
         }
+    }
+
+    /**
+     * Retorna si ya existe una nota con el mismo titulo y usuario
+     * @param route 
+     */
+    checkIfFileExist(route: string): boolean {
+        if (fs.existsSync(route)) return true;
+        return false;
     }
 }
