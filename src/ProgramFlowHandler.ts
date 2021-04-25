@@ -2,9 +2,10 @@ import * as chalk from 'chalk';
 import * as fs from 'fs';
 
 import {Note} from './Note'
-import {NoteCollection} from './NoteCollection'
-import {walk} from './initializeYargs'
 
+/**
+ * Clase encargada de la lectura/escritura en el sistema de ficheros, gestionando los errores correspondientes
+ */
 export class ProgramFlowHandler {
     constructor() {}
 
@@ -18,6 +19,7 @@ export class ProgramFlowHandler {
         if(!this.checkIfFileExist(note.route)) {
             try {
                 this.checkUserDirectory(note.user);
+                note.setColor("red");
                 fs.writeFile(note.route, this.noteToJSON(note), () => {
                     console.log(chalk.green("Note Added Successfully!"));
                   });
@@ -29,15 +31,20 @@ export class ProgramFlowHandler {
         }  
     }
 
-    /**
-     * Modifica una nota, si existe.
-     * @param note 
-     */
+     /**
+      * Modifica una nota, si existe.
+      * Permite cambiar el título, cuerpo o color de la nota.
+      * En caso de cambiar el título, se modifica también el nombre del fichero, facilitando su gestión.
+      * @param note 
+      * @param ntitle 
+      * @param nbody 
+      * @param ncolor 
+      */
     modifyNote(note: string, ntitle: string, nbody: string, ncolor: string) {
         if(this.checkIfFileExist(note)) {
             try {
                 let noteToModify: Note;
-                let readNote: string = fs.readFileSync(note, 'utf-8').toString();
+                let readNote: string = fs.readFileSync(note).toString();
                 noteToModify = this.JSONtoNote(readNote);
                 if(ntitle !== "") {
                     console.log(chalk.green("You have changed the title, so the note will be removed and created with the new title."));
@@ -48,7 +55,7 @@ export class ProgramFlowHandler {
                 } 
                 if(nbody !== "") noteToModify.setBody(nbody);
                 if(ncolor !== "") noteToModify.setColor(ncolor);
-                fs.writeFile(noteToModify.route, this.noteToJSON(noteToModify), () => {
+                fs.writeFile(noteToModify.getRoute(), this.noteToJSON(noteToModify), () => {
                     console.log(chalk.green("Note Modified Successfully!"));
                   });
             } catch {
@@ -136,7 +143,9 @@ export class ProgramFlowHandler {
      * @param jsonnote 
      */
     JSONtoNote(jsonnote: string): Note {
-        return JSON.parse(jsonnote);
+        let aux = JSON.parse(jsonnote);
+        let note: Note = new Note(aux.title, aux.body, aux.user, aux.color, aux.route);
+        return note;
     }
 
     /**

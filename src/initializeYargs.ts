@@ -3,8 +3,11 @@ import {Note} from './Note'
 
 import * as yargs from 'yargs';
 import * as chalk from 'chalk';
-import * as fs from 'fs';
 
+/**
+ * Función encargada de procesar los argumentos de entrada por la línea de comandos.
+ * @param workflow Gestor del flujo de trabajo. Encargado del control de lecturas y escrituas al sistema de archivos
+ */
 export function InitializeYargsCommands(workflow: ProgramFlowHandler): void {
   //Comando ADD: Usado para añadir una nueva nota
   yargs.command({
@@ -130,14 +133,13 @@ export function InitializeYargsCommands(workflow: ProgramFlowHandler): void {
           console.error(chalk.red("You need to add at least something to modify!\n\n--newtitle\n--newbody\n--newcolor"));
         }
         else {
-          console.log(ntitle);
           //Retira caracteres especiales del titulo para evitar problemas con el sistema de ficheros, y genera el nombre del fichero en formato json
           let filename: string = argv.title.replace(/[&\/\\#,+()$~%.'":*?<>{}!¡¿]/g, '') + '.json';
           //Genera la ruta en la que debería estar la nota, usando su usuario y su nombre de fichero
           let noteRoute: string = `notes/${argv.user}/${filename}`;
-          console.log(noteRoute);
+          //let noteToModify: Note = new Note();
           //Intenta eliminar la nota desde el gestor del flujo de trabajo
-          workflow.modifyNote(noteRoute, ntitle, nbody, ncolor);
+          workflow.modifyNote(/*noteToModify, */noteRoute, ntitle, nbody, ncolor);
         }
       }
     },
@@ -148,7 +150,7 @@ export function InitializeYargsCommands(workflow: ProgramFlowHandler): void {
     describe: 'List user notes',
     builder: {
       user: {
-        describe: 'Uer who owns the notes',
+        describe: 'User who owns the notes',
         demandOption: true,
         type: 'string',
       },
@@ -172,7 +174,7 @@ export function InitializeYargsCommands(workflow: ProgramFlowHandler): void {
         type: 'string',
       },
       user: {
-        describe: 'Uer who owns the note',
+        describe: 'User who owns the note',
         demandOption: true,
         type: 'string',
       },
@@ -190,27 +192,3 @@ export function InitializeYargsCommands(workflow: ProgramFlowHandler): void {
     },
   }).parse();
 }
-
-var path = require('path');
-export var walk = function(dir: string, done) {
-  var results: string[] = [];
-  fs.readdir(dir, function(err, list) {
-    if (err) return done(err);
-    var pending = list.length;
-    if (!pending) return done(null, results);
-    list.forEach(function(file) {
-      file = path.resolve(dir, file);
-      fs.stat(file, function(err, stat) {
-        if (stat && stat.isDirectory()) {
-          walk(file, function(err, res) {
-            results = results.concat(res);
-            if (!--pending) done(null, results);
-          });
-        } else {
-          results.push(file);
-          if (!--pending) done(null, results);
-        }
-      });
-    });
-  });
-};

@@ -19,3 +19,6 @@ obj
 # Desarrollo
 node_modules
 components
+
+#Notas de pruebas
+./notes/*/*

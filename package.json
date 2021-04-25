@@ -8,7 +8,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "nyc mocha",
     "doc": "typedoc;"
   },
   "keywords": [],
@@ -21,8 +21,10 @@
     "@types/yargs": "^16.0.1",
     "chai": "^4.3.4",
     "chalk": "^4.1.1",
+    "coveralls": "^3.1.0",
     "eslint": "^7.22.0",
     "mocha": "^8.3.2",
+    "nyc": "^15.1.0",
     "ts-node": "^9.1.1",
     "typedoc": "^0.20.32",
     "typescript": "^4.2.4",
