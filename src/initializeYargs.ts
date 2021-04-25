@@ -137,7 +137,6 @@ export function InitializeYargsCommands(workflow: ProgramFlowHandler): void {
           let filename: string = argv.title.replace(/[&\/\\#,+()$~%.'":*?<>{}!¡¿]/g, '') + '.json';
           //Genera la ruta en la que debería estar la nota, usando su usuario y su nombre de fichero
           let noteRoute: string = `notes/${argv.user}/${filename}`;
-          //let noteToModify: Note = new Note();
           //Intenta eliminar la nota desde el gestor del flujo de trabajo
           workflow.modifyNote(/*noteToModify, */noteRoute, ntitle, nbody, ncolor);
         }
