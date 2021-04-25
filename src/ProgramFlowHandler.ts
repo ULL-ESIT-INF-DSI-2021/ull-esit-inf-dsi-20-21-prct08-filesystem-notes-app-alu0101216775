@@ -19,7 +19,6 @@ export class ProgramFlowHandler {
         if(!this.checkIfFileExist(note.route)) {
             try {
                 this.checkUserDirectory(note.user);
-                note.setColor("red");
                 fs.writeFile(note.route, this.noteToJSON(note), () => {
                     console.log(chalk.green("Note Added Successfully!"));
                   });
@@ -52,9 +51,16 @@ export class ProgramFlowHandler {
                     noteToModify.setTitle(ntitle);
                     let filename: string = ntitle.replace(/[&\/\\#,+()$~%.'":*?<>{}!¡¿]/g, '') + '.json';
                     noteToModify.setRoute(`notes/${noteToModify.user}/${filename}`);
+                    console.log(chalk.green("Title changed"));
                 } 
-                if(nbody !== "") noteToModify.setBody(nbody);
-                if(ncolor !== "") noteToModify.setColor(ncolor);
+                if(nbody !== "") {
+                    noteToModify.setBody(nbody);
+                    console.log(chalk.green("Body changed"));
+                }
+                if(ncolor !== "") {
+                    noteToModify.setColor(ncolor);
+                    console.log(chalk.green("Color changed"));
+                }
                 fs.writeFile(noteToModify.getRoute(), this.noteToJSON(noteToModify), () => {
                     console.log(chalk.green("Note Modified Successfully!"));
                   });

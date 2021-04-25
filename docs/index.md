@@ -134,6 +134,16 @@ Cuenta con los métodos get y set para cada uno de esos atributos.
 
 * * *
 
+## Principales problemas encontrados
+
+Al incorporar varias funcionalidades nuevas, esta práctica ha generado varios problemas que han presentado dificultades a la hora de resolverse.
+
+1. En un principio, la funcion initializeYargs estaba en la misma clase ProgramFlowHandler. Sin embargo, esto generaba varios problemas de cumplimiento de los principios SOLID. Además, se podían generar errores al acceder a los atributos de la clase desde los handler de yargs.
+
+2. Los test de las funciones asíncronas también generaban muchos errores. Además, aquellos que no retornaban valores o generaban ficheros nuevos, como listNote() eran bastante complejos de testar con únicamente mocha y chai. Por ello, se ha añadido el paquete "sinon" para analizar las salidas de la consola y detectar errores o confirmaciones de forma automática.
+
+* * *
+
 ## Integración continua con Github Actions
 
 Para esta práctica se ha configurado una GitHub Action encargada de llevar a cabo la integración continua del código. Para ello, se ha creado la acción de CI en NodeJS en el repositorio de GitHub. Se ha añadido, además, un fichero llamado **node.js.yml** en el directorio **.github/workflows**, encargado de gestionar la acción.
@@ -145,6 +155,8 @@ Se ha añadido la insignia correspondiente al README del repositorio y a este in
 ## Cubrimiento del código con coveralls
 
 El código tiene pruebas mediante TDD realizadas con mocha y chai, y cubrimiento con Istanbul (nyc). Haciendo uso de una Github Action y de la web coveralls, se recopila la información de cubrimiento en formato lcov y se envía a coveralls, pudiendo acceder a información al respecto.
+
+El porcentaje de cubrimiento total es bajo ya que las líneas de control de errores de los bloques catch no son comprobadas para evitar hacer fallar otros test. Sin embargo, el cubrimiento de las funciones es del 100%.
 
 Además, se añade una insignia a la documentación, indicando el porcentaje de código cubierto.
 
