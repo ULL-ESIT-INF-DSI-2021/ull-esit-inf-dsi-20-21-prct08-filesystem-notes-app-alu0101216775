@@ -23,6 +23,7 @@ package-lock.json
 
 #Nyc
 .nyc_output
+coverage
 
 #Notas de pruebas
 ./notes/*/*
