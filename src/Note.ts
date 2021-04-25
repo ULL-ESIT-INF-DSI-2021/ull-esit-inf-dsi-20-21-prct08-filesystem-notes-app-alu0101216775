@@ -12,4 +12,17 @@ export class Note {
         this.color = color;
         this.user = user;
     }
+
+    setTitle(newtitle: string) {
+        this.title = newtitle;
+    }
+    setBody(body: string) {
+        this.body = body;
+    }
+    setColor(color: string) {
+        this.color = color;
+    }
+    setRoute(route: string) {
+        this.route = route;
+    }
 }

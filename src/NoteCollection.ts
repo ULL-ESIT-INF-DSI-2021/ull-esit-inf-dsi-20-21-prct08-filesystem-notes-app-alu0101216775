@@ -1,4 +1,5 @@
 import {Note} from './Note'
+import * as chalk from 'chalk';
 
 export class NoteCollection {
     notes: Note[];
@@ -11,7 +12,7 @@ export class NoteCollection {
     }
 
     public addNote(note: Note) {
-        let tmp: string = "Hola";
+        this.notes.push(note);
     }
 
     public modifyNote(note: string) {
@@ -22,8 +23,12 @@ export class NoteCollection {
         
     }
 
-    public listNotes() {
-
+    public listNotes(user: string) {
+        let usernotes: Note[] = this.notes.filter(note => note.user === user);
+        usernotes.forEach(note => {
+            console.log(chalk.keyword(note.color)(note.title));
+            console.log(chalk.green("Note exist Successfully!"));
+        })
     }
 
     public readNote(note: string) {
